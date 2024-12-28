@@ -14,6 +14,7 @@ def api_home(request):
 @csrf_exempt
 def chatbot_response(request):
     if  request.method == 'POST':
+        print("accessing the error handling metho")
         try:
             body = json.loads(request.body)
             user_input = body.get('message', '')
