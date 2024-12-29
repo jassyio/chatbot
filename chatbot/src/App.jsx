@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -12,7 +12,7 @@ function App() {
     setChatHistory((prev) => [...prev, newMessage]);
 
     try {
-      const response = await axios.post('http://localhost:5000/chat', { message });
+      const response = await axios.post('http://localhost:8000/chatbot', { message });
       const botMessage = response.data.response;
       setChatHistory((prev) =>
         prev.map((chat, index) =>
