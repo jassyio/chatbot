@@ -12,7 +12,7 @@ function App() {
     setChatHistory((prev) => [...prev, newMessage]);
 
     try {
-      const response = await axios.post('http://localhost:8000/chatbot', { message });
+      const response = await axios.post('http://localhost:8000/chatbot/', { message });
       const botMessage = response.data.response;
       setChatHistory((prev) =>
         prev.map((chat, index) =>
