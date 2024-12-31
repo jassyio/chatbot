@@ -5,14 +5,19 @@ import './App.css';
 function App() {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newMessage = { user: message, bot: '' };
     setChatHistory((prev) => [...prev, newMessage]);
+    setLoading(true);
+    setError('');
 
     try {
       const response = await axios.post('http://localhost:8000/chatbot/', { message });
+      console.log("Backend response:", response.data);
       const botMessage = response.data.response;
       setChatHistory((prev) =>
         prev.map((chat, index) =>
@@ -21,6 +26,9 @@ function App() {
       );
     } catch (error) {
       console.error("Error communicating with the backend", error);
+      setError('Failed to get a response from the chatbot. Please try again.');
+    } finally {
+      setLoading(false);
     }
     setMessage('');
   };
@@ -36,6 +44,7 @@ function App() {
           </div>
         ))}
       </div>
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input 
           type="text" 
@@ -43,7 +52,7 @@ function App() {
           onChange={(e) => setMessage(e.target.value)} 
           placeholder="Type your message..." 
         />
-        <button type="submit">Send</button>
+        <button type="submit" disabled={loading}>Send</button>
       </form>
     </div>
   );
