@@ -1,29 +1,19 @@
 import json
+import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from transformers import AutoTokenizer, AutoModelForCausalLM
-import torch
-import os
+from dotenv import load_dotenv
+import openai
 
-# Initialize the Hugging Face model and tokenizer
-MODEL_NAME = "microsoft/DialoGPT-medium"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
-
-# Optionally, move model to GPU if available
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-
-# Initialize chat history
-chat_history_ids = None
-max_history_length = 6  # Number of previous turns to keep
+# Load environment variables
+load_dotenv()
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def api_home(request):
     return JsonResponse({'message': 'Welcome to the Chatbot API!'})
 
 @csrf_exempt
 def chatbot_response(request):
-    global chat_history_ids
     print(f"Requesting method: {request.method}")
     if request.method == 'POST':
         try:
@@ -36,37 +26,26 @@ def chatbot_response(request):
             if not user_input:
                 return JsonResponse({'error': 'Message is required'}, status=400)
 
-            # Encode the new user input, add the eos_token and return a tensor
-            new_user_input_ids = tokenizer.encode(user_input + tokenizer.eos_token, return_tensors='pt').to(device)
-
-            # Append the new user input tokens to the chat history
-            if chat_history_ids is not None:
-                chat_history_ids = torch.cat([chat_history_ids, new_user_input_ids], dim=-1)
-            else:
-                chat_history_ids = new_user_input_ids
-
-            # Generate a response
-            response_ids = model.generate(
-                chat_history_ids,
-                max_length=1000,
-                pad_token_id=tokenizer.eos_token_id,
-                no_repeat_ngram_size=3,
-                do_sample=True,
-                top_k=50,
-                top_p=0.95,
-                temperature=0.7
+            # Call OpenAI's Chat API
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",  # or "gpt-4"
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": user_input},
+                ],
+                max_tokens=150,
+                temperature=0.7,
+                top_p=0.9,
             )
 
-            # Decode the response, skip the prompt
-            bot_response = tokenizer.decode(response_ids[:, chat_history_ids.shape[-1]:][0], skip_special_tokens=True)
-
-            # Optionally, limit the chat history
-            if chat_history_ids.shape[-1] > 1000:
-                chat_history_ids = new_user_input_ids
+            bot_response = response.choices[0].message['content'].strip()
 
             return JsonResponse({'response': bot_response})
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+        except openai.error.OpenAIError as e:
+            print(f"Error communicating with OpenAI: {e}")
+            return JsonResponse({'error': f"Error communicating with OpenAI: {e}"}, status=500)
         except Exception as e:
             print(f"Exception: {str(e)}")
             return JsonResponse({'error': str(e)}, status=500)
