@@ -3,11 +3,14 @@ import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
-import openai
+import cohere
 
 # Load environment variables
 load_dotenv()
-openai.api_key = os.getenv('OPENAI_API_KEY')
+cohere_api_key = os.getenv('COHERE_API_KEY')
+
+# Initialize the Cohere client
+co = cohere.Client(cohere_api_key)
 
 def api_home(request):
     return JsonResponse({'message': 'Welcome to the Chatbot API!'})
@@ -26,26 +29,23 @@ def chatbot_response(request):
             if not user_input:
                 return JsonResponse({'error': 'Message is required'}, status=400)
 
-            # Call OpenAI's Chat API
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # or "gpt-4"
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": user_input},
-                ],
+            # Call Cohere's Generate API
+            response = co.generate(
+                model='command-xlarge-nightly',
+                prompt=f"You are a helpful assistant.\nUser: {user_input}\nAssistant:",
                 max_tokens=150,
                 temperature=0.7,
-                top_p=0.9,
+                p=0.9,
             )
 
-            bot_response = response.choices[0].message['content'].strip()
+            bot_response = response.generations[0].text.strip()
 
             return JsonResponse({'response': bot_response})
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
-        except openai.error.OpenAIError as e:
-            print(f"Error communicating with OpenAI: {e}")
-            return JsonResponse({'error': f"Error communicating with OpenAI: {e}"}, status=500)
+        except cohere.CohereError as e:
+            print(f"Error communicating with Cohere: {e}")
+            return JsonResponse({'error': f"Error communicating with Cohere: {e}"}, status=500)
         except Exception as e:
             print(f"Exception: {str(e)}")
             return JsonResponse({'error': str(e)}, status=500)
