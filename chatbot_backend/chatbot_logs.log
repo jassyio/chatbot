@@ -1,0 +1,9 @@
+2025-01-02 12:02:49,234 WARNING Not Found: /favicon.ico
+2025-01-02 12:06:22,791 WARNING Not Found: /api/session/
+2025-01-02 12:06:23,129 WARNING Not Found: /api/session/
+2025-01-02 12:07:20,753 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-02 12:07:20,773 INFO User: User, Message: Hello, how are you?
+2025-01-02 12:07:20,774 INFO User: Chatbot, Message: I'm doing well, thank you! How can I assist you today? I'm here to help and provide any information or support you might need.
+2025-01-02 12:08:09,486 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-02 12:08:09,493 INFO User: User, Message: hello
+2025-01-02 12:08:09,493 INFO User: Chatbot, Message: Hello! How can I assist you today? I'm here to help with any questions or tasks you may have.
