@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -8,6 +8,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [sessionToken, setSessionToken] = useState('');
+  const chatBoxRef = useRef(null);
 
   useEffect(() => {
     // Load session token on app load
@@ -25,6 +26,13 @@ function App() {
         .catch(() => setError('Failed to initialize session.'));
     }
   }, []);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat box when a new message is added
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,29 +72,39 @@ function App() {
     setMessage('');
   };
 
+  const handleClearChat = () => {
+    setChatHistory([]);
+  };
+
   return (
     <div className="App">
-      <h1>AI Chatbot</h1>
-      <div className="chat-box">
-        {chatHistory.map((chat, index) => (
-          <div key={index} className="chat-message">
-            <p><strong>You:</strong> {chat.user}</p>
-            <p><strong>Bot:</strong> {chat.bot}</p>
-          </div>
-        ))}
-      </div>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          value={message} 
-          onChange={(e) => setMessage(e.target.value)} 
-          placeholder="Type your message..." 
-          disabled={loading}
-        />
-        <button type="submit" disabled={loading}>Send</button>
-      </form>
-      {loading && <p className="loading">Loading...</p>}
+      <header className="App-header">
+        <h1>AI Chatbot</h1>
+      </header>
+      <main className="chat-container">
+        <div className="chat-box" ref={chatBoxRef}>
+          {chatHistory.map((chat, index) => (
+            <div key={index} className="chat-message">
+              <p className="user-message"><strong>You:</strong> {chat.user}</p>
+              <p className="bot-message"><strong>Bot:</strong> {chat.bot}</p>
+            </div>
+          ))}
+        </div>
+        {error && <p className="error">{error}</p>}
+        <form className="chat-form" onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            value={message} 
+            onChange={(e) => setMessage(e.target.value)} 
+            placeholder="Type your message..." 
+            className="chat-input"
+          />
+          <button type="submit" disabled={loading} className="chat-button">
+            {loading ? 'Sending...' : 'Send'}
+          </button>
+        </form>
+        <button onClick={handleClearChat} className="clear-button">Clear Chat</button>
+      </main>
     </div>
   );
 }

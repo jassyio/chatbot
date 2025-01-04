@@ -124,3 +124,23 @@ button:active {
 .chat-box::-webkit-scrollbar-thumb:hover {
   background: #888;
 }
+
+.clear-button {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+}
+
+.clear-button:hover {
+  background: #cc0000;
+}
+
+.clear-button:active {
+  transform: scale(0.98);
+}
