@@ -38,6 +38,12 @@ function App() {
     }
   }, [chatHistory]);
 
+  useEffect(() => {
+    if (inputRef.current && !loading) {
+      inputRef.current.focus();
+    }
+  }, [loading]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) {
@@ -72,8 +78,7 @@ function App() {
       setError('Failed to get a response from the chatbot. Please try again.');
     } finally {
       setLoading(false);
-      setMessage(''); // Clear the input field
-      inputRef.current.focus(); // Refocus the input field
+      setMessage('');
     }
   };
 
