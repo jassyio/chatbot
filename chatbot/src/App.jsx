@@ -9,6 +9,7 @@ function App() {
   const [error, setError] = useState('');
   const [sessionToken, setSessionToken] = useState('');
   const chatBoxRef = useRef(null);
+  const inputRef = useRef(null); // Ref for the input field
 
   useEffect(() => {
     // Load session token on app load
@@ -23,7 +24,10 @@ function App() {
           setSessionToken(token);
           localStorage.setItem('sessionToken', token);
         })
-        .catch(() => setError('Failed to initialize session.'));
+        .catch(error => {
+          console.error("Error initializing session:", error);
+          setError('Failed to initialize session. Please check the backend.');
+        });
     }
   }, []);
 
@@ -68,8 +72,9 @@ function App() {
       setError('Failed to get a response from the chatbot. Please try again.');
     } finally {
       setLoading(false);
+      setMessage(''); // Clear the input field
+      inputRef.current.focus(); // Refocus the input field
     }
-    setMessage('');
   };
 
   const handleClearChat = () => {
@@ -86,9 +91,10 @@ function App() {
           {chatHistory.map((chat, index) => (
             <div key={index} className="chat-message">
               <p className="user-message"><strong>You:</strong> {chat.user}</p>
-              <p className="bot-message"><strong>Bot:</strong> {chat.bot}</p>
+              {chat.bot && <p className="bot-message"><strong>Bot:</strong> {chat.bot}</p>}
             </div>
           ))}
+          {loading && <div className="loading-spinner"></div>}
         </div>
         {error && <p className="error">{error}</p>}
         <form className="chat-form" onSubmit={handleSubmit}>
@@ -98,6 +104,8 @@ function App() {
             onChange={(e) => setMessage(e.target.value)} 
             placeholder="Type your message..." 
             className="chat-input"
+            disabled={loading}
+            ref={inputRef} // Attach the ref to the input field
           />
           <button type="submit" disabled={loading} className="chat-button">
             {loading ? 'Sending...' : 'Send'}

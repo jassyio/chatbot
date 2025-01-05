@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 import logging
 from datetime import datetime
-
+import uuid
 # Load environment variables
 load_dotenv()
 cohere_api_key = os.getenv('COHERE_API_KEY')
@@ -29,6 +29,13 @@ logging.basicConfig(
 
 def log_interaction(user, message):
     logging.info(f"User: {user}, Message: {message}")
+
+def session_view(request):
+    if request.method == 'GET':
+        session_token = str(uuid.uuid4())  # Generate a unique session token
+        return JsonResponse({'session_token': session_token})
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 # Session Management
 @login_required
