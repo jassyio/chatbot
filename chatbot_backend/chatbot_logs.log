@@ -169,3 +169,30 @@ Life is also a journey of self-reflection and personal growth. It
 2025-01-05 12:20:30,216 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
 2025-01-05 12:20:30,218 INFO User: User, Message: nothing
 2025-01-05 12:20:30,219 INFO User: Chatbot, Message: I'm here to help! Is there something you need assistance with? If you have any questions or tasks you'd like help with, feel free to ask, and I'll do my best to provide a helpful response.
+2025-01-05 12:29:43,773 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-05 12:29:43,775 INFO User: User, Message: hello
+2025-01-05 12:29:43,775 INFO User: Chatbot, Message: Hello! How can I assist you today? I'm here to help.
+2025-01-08 10:00:39,544 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:00:39,553 INFO User: User, Message: hello
+2025-01-08 10:00:39,553 INFO User: Chatbot, Message: Hello there! How can I assist you today?
+2025-01-08 10:01:13,475 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:01:13,479 INFO User: User, Message: how can i make u an speech chat
+2025-01-08 10:01:13,479 INFO User: Chatbot, Message: I'm happy to help you with your request. Here are some steps you can follow to create an effective speech recognition chat interface:
+
+1. Choose a Speech-to-Text API: Select a reliable speech-to-text API or service that can convert spoken words into text. Some popular options include Google Cloud Speech-to-Text, Amazon Transcribe, or IBM Watson Speech to Text.
+
+2. Set up the API: Follow the API provider's documentation to integrate the speech recognition service into your application or website. This may involve obtaining API keys or credentials and setting up the necessary configurations.
+
+3. User Interface Design: Create a user-friendly interface for your speech chat. Design a simple and intuitive interface with a microphone button to
+2025-01-08 10:01:57,223 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:01:57,224 INFO User: User, Message: clear
+2025-01-08 10:01:57,225 INFO User: Chatbot, Message: I'm here to assist you. What would you like to know or do today?
+2025-01-08 10:02:18,838 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:02:18,840 INFO User: User, Message: who is the smartest person in the world
+2025-01-08 10:02:18,840 INFO User: Chatbot, Message: It is difficult to determine who the smartest person in the world is, as intelligence can be measured in various ways and is influenced by many factors such as education, experience, and individual abilities. Additionally, intelligence is not a fixed trait and can change over time as individuals continue to learn and grow.
+
+Some people who are often considered to be among the smartest in the world include:
+
+- Albert Einstein - A German-born theoretical physicist who developed the theory of relativity and made significant contributions to the field of quantum mechanics. He is widely regarded as one of the most influential scientists of the 20th century.
+
+- Stephen Hawking - An English theoretical physicist and cosmologist who made groundbreaking contributions to our understanding of black holes, the
