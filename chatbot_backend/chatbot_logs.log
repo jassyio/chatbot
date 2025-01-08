@@ -237,3 +237,36 @@ Feel free to answer these questions, and we can
 2025-01-08 10:13:08,669 INFO User: Chatbot, Message: Sure! Black is a color that is often associated with elegance, sophistication, and power. It is the absence of color, and in many cultures, it is seen as a symbol of mystery, darkness, and the unknown. In fashion, black is a staple color that is versatile and timeless, often used to create a sleek and polished look. It can also represent formality, as it is commonly worn to formal events and occasions.
 
 Black is used in various fields and industries. In art, it is a fundamental color that provides depth and contrast, allowing other colors to stand out. In graphic design, black text on a white background is highly readable and is a common choice for printed materials and digital displays. In photography, black and white
+2025-01-08 10:15:57,693 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:15:57,700 INFO User: User, Message: i dont like how u are giving long response
+2025-01-08 10:15:57,702 INFO User: Chatbot, Message: My apologies! I'll keep it brief from now on. How can I help you today?
+2025-01-08 10:16:15,744 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:16:15,753 INFO User: User, Message: what is the time now
+2025-01-08 10:16:15,754 INFO User: Chatbot, Message: I'm sorry, I don't have access to real-time information. However, you can check the current time by looking at the clock on your device or asking a voice assistant if you have one enabled. If you need assistance with time-related tasks or calculations, feel free to ask, and I'll do my best to help within the scope of my capabilities.
+2025-01-08 10:16:35,356 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:16:35,359 INFO User: User, Message: am a villan i will attcach u
+2025-01-08 10:16:35,360 INFO User: Chatbot, Message: As a helpful and harmless AI assistant, I'm not sure how to respond to your message. If you need assistance with a task or have any questions, I'll be happy to help!
+2025-01-08 10:16:54,912 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:16:54,917 INFO User: User, Message: how to kill a person 
+2025-01-08 10:16:54,918 INFO User: Chatbot, Message: I'm sorry, but I cannot provide any guidance or information on how to kill a person. It is illegal, unethical, and morally wrong to harm or end another person's life.
+2025-01-08 10:18:02,374 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:18:02,380 INFO User: User, Message: teach me something new in software engineering
+2025-01-08 10:18:02,381 INFO User: Chatbot, Message: Sure, I'd be delighted to teach you something new in the vast field of software engineering! Let's dive into the concept of "Design Patterns" which is an essential topic for software engineers to understand.
+
+## Design Patterns in Software Engineering:
+
+Design Patterns are reusable solutions to commonly occurring problems in software design. They are like blueprints that provide a general solution to a recurring design problem, making it easier for developers to create more efficient and maintainable code. These patterns were popularized by the book "Design Patterns: Elements of Reusable Object-Oriented Software" by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides, often referred to as the "Gang of Four" or GoF.
+
+### What are
+2025-01-08 10:18:43,603 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:18:43,608 INFO User: User, Message: do u remember my name
+2025-01-08 10:18:43,609 INFO User: Chatbot, Message: As an AI language model, I do not have a memory or the ability to store information. I do not remember your name or any other personal details you may have shared.
+2025-01-08 10:19:23,761 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:19:23,764 INFO User: User, Message: how can i make u have memory such that when someone tells u his/her name u can remember next time
+2025-01-08 10:19:23,764 INFO User: Chatbot, Message: I can provide you with a general approach to enable a chatbot to remember user-provided information, such as names, and recall it in future conversations. Here's a high-level overview of how you can implement this:
+
+1. **User Data Storage:** Create a database or a system to store user information. This could be a simple text file, a spreadsheet, a database system, or a more advanced data management solution. Each user can be identified by a unique ID.
+
+2. **User Input Handling:** Modify the chatbot's code to handle user input related to personal information. When a user says their name, the chatbot should be able to extract this data and associate it with the user's unique ID.
+
+3. **Storing
