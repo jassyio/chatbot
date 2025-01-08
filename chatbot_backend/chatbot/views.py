@@ -64,15 +64,19 @@ def chatbot_response(request):
             
             body = json.loads(request.body)
             user_input = body.get('message', '')
+            short_reply = body.get('short_reply', False)
 
             if not user_input:
                 return JsonResponse({'error': 'Message is required'}, status=400)
+            
+
+            max_token = 50 if short_reply else 150
 
             # Call Cohere's Generate API
             response = co.generate(
                 model='command-xlarge-nightly',
                 prompt=f"You are a helpful assistant.\nUser: {user_input}\nAssistant:",
-                max_tokens=150,
+                max_tokens=max_token,
                 temperature=0.7,
                 p=0.9,
             )

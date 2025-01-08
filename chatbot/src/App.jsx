@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { Send, Trash2, Loader, RefreshCw } from 'lucide-react';
 import './App.css';
@@ -13,7 +13,7 @@ function App() {
   const chatBoxRef = useRef(null);
   const inputRef = useRef(null);
 
-  const initializeSession = async () => {
+  const initializeSession = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/session/', { timeout: 5000 });
       const token = response.data.session_token;
@@ -25,7 +25,7 @@ function App() {
       setError('Failed to initialize session. Please check if the backend server is running and try again.');
       throw error;
     }
-  };
+  }, [error]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('sessionToken');
@@ -34,7 +34,7 @@ function App() {
     } else {
       initializeSession().catch(() => {});
     }
-  }, []);
+  }, [initializeSession]);
 
   useEffect(() => {
     if (chatBoxRef.current) {

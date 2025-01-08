@@ -196,3 +196,44 @@ Some people who are often considered to be among the smartest in the world inclu
 - Albert Einstein - A German-born theoretical physicist who developed the theory of relativity and made significant contributions to the field of quantum mechanics. He is widely regarded as one of the most influential scientists of the 20th century.
 
 - Stephen Hawking - An English theoretical physicist and cosmologist who made groundbreaking contributions to our understanding of black holes, the
+2025-01-08 10:07:02,353 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-08 10:07:27,206 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-08 10:08:20,803 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-08 10:08:28,862 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-08 10:08:43,115 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-08 10:10:47,329 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:10:47,349 INFO User: User, Message: hello cohere
+2025-01-08 10:10:47,350 INFO User: Chatbot, Message: Hello there! How can I assist you today? I'm here to help with any questions or tasks you might have. Feel free to ask away!
+2025-01-08 10:11:22,736 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:11:22,741 INFO User: User, Message: ask me anyhting and i will answer
+2025-01-08 10:11:22,742 INFO User: Chatbot, Message: Thank you for your willingness to answer questions. Here's one to start: What do you enjoy doing in your free time?
+2025-01-08 10:11:54,986 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:11:54,991 INFO User: User, Message: reading books like now am reading a book called personal MBA
+2025-01-08 10:11:54,991 INFO User: Chatbot, Message: That's great! "The Personal MBA: Master the Art of Business" by Josh Kaufman is a comprehensive guide that offers a broad overview of essential business concepts. It's an excellent resource for anyone interested in understanding the fundamentals of business and personal development. 
+
+Here are some key topics covered in the book:
+1. Value Creation: Understanding how businesses create value for customers and stakeholders.
+2. Marketing: Learning about market research, customer segmentation, and effective marketing strategies.
+3. Sales: Strategies for building rapport, communicating value, and closing deals.
+4. Value Delivery: Managing operations, quality control, and customer service.
+5. Finance: Basics of financial statements, budgeting, and investment analysis.
+6. Career Development
+2025-01-08 10:12:35,651 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:12:35,660 INFO User: User, Message: lets continue you  asking me questions
+2025-01-08 10:12:35,661 INFO User: Chatbot, Message: Alright, I'd be happy to continue asking questions! Here we go:
+
+1. If you could travel to any country in the world for a cultural immersion experience, which country would you choose and why?
+2. What is your favorite book genre, and what specific book from that genre has left a lasting impression on you?
+3. If you could have dinner with any three historical figures, who would they be, and what topics would you discuss?
+4. Do you have any hobbies or activities that help you relax and unwind after a busy day?
+5. What is one skill or talent you've always wanted to learn, and why does it interest you?
+
+Feel free to answer these questions, and we can
+2025-01-08 10:13:00,708 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:13:00,713 INFO User: User, Message: ask 1 question at a time
+2025-01-08 10:13:00,714 INFO User: Chatbot, Message: What is your favorite color?
+2025-01-08 10:13:08,652 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-08 10:13:08,669 INFO User: User, Message: black
+2025-01-08 10:13:08,669 INFO User: Chatbot, Message: Sure! Black is a color that is often associated with elegance, sophistication, and power. It is the absence of color, and in many cultures, it is seen as a symbol of mystery, darkness, and the unknown. In fashion, black is a staple color that is versatile and timeless, often used to create a sleek and polished look. It can also represent formality, as it is commonly worn to formal events and occasions.
+
+Black is used in various fields and industries. In art, it is a fundamental color that provides depth and contrast, allowing other colors to stand out. In graphic design, black text on a white background is highly readable and is a common choice for printed materials and digital displays. In photography, black and white
