@@ -270,3 +270,10 @@ Design Patterns are reusable solutions to commonly occurring problems in softwar
 2. **User Input Handling:** Modify the chatbot's code to handle user input related to personal information. When a user says their name, the chatbot should be able to extract this data and associate it with the user's unique ID.
 
 3. **Storing
+2025-01-09 10:25:32,004 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-09 10:25:32,038 INFO User: User, Message: hello
+2025-01-09 10:25:32,038 INFO User: Chatbot, Message: Hello! How can I assist you today? I'm here to help with any questions or tasks you might have.
+2025-01-09 10:27:57,199 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-09 10:27:57,219 INFO User: User, Message: crack a very funny joke
+2025-01-09 10:27:57,219 INFO User: Chatbot, Message: What do you call a bear with no teeth? A gummy bear!
+2025-01-09 11:07:31,758 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot_backend\settings.py changed, reloading.
