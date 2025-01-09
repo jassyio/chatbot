@@ -55,6 +55,22 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  
     'http://127.0.0.1:5173',
+    'https://chatai-lime-theta.vercel.app'
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+    "x-csrftoken",
 ]
 
 ROOT_URLCONF = 'chatbot_backend.urls'
