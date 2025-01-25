@@ -86,6 +86,15 @@ def chatbot_response(request):
             log_interaction('Chatbot', bot_response)
 
             return JsonResponse({'response': bot_response})
+        
+        except cohere.CohereError as e:
+            logging.error(f"Cohere API Error: {e}")
+            return JsonResponse({'error': 'Chat service unavailable'}, status=503)
+        
+        except KeyError as e:
+            logging.error(f"KeyError: (e)")
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
         except cohere.CohereError as e:
