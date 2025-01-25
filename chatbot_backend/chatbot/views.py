@@ -55,7 +55,7 @@ def save_chat_history(request):
     return JsonResponse({"status": "success", "chat_history": chat_history})
 
 # Logging and Monitoring
-@csrf_exempt
+
 def chatbot_response(request):
     print(f"Requesting method: {request.method}")
     if request.method == 'POST':
