@@ -3,7 +3,6 @@ import os
 from django.http import JsonResponse
 from dotenv import load_dotenv
 import cohere
-from django.contrib.auth.decorators import login_required
 from django.middleware.csrf import CsrfViewMiddleware
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
