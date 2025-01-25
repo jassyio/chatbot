@@ -43,6 +43,7 @@ def save_chat_history(request):
     session_key = request.session.session_key
     if not session_key:
         request.session.create()
+        request.session.save()
     chat_history = request.session.get('chat_history', [])
     user_message = request.POST.get('message')
     chat_history.append({
