@@ -27,7 +27,10 @@ logging.basicConfig(
 )
 
 def log_interaction(user, message):
-    logging.info(f"User: {user}, Message: {message}")
+    try:
+        logging.info(f"User: {user}, Message: {message}")
+    except Exception as e:
+        logging.error(f"Error logging interaction: {e}")
 
 def session_view(request):
     if request.method == 'GET':
@@ -40,19 +43,19 @@ def session_view(request):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def save_chat_history(request):
+def save_chat_history(request, message):
     session_key = request.session.session_key
     if not session_key:
         request.session.create()
         request.session.save()
     chat_history = request.session.get('chat_history', [])
-    user_message = request.POST.get('message')
+    
     chat_history.append({
-        'message': user_message,
+        'message': message,
         'timestamp': datetime.now().isoformat()
     })
     request.session['chat_history'] = chat_history
-    log_interaction(request.user.username, user_message)
+    log_interaction(request.user.username, message)
     return JsonResponse({"status": "success", "chat_history": chat_history})
 
 # Logging and Monitoring
@@ -86,6 +89,9 @@ def chatbot_response(request):
             bot_response = response.generations[0].text.strip()
             log_interaction('User', user_input)
             log_interaction('Chatbot', bot_response)
+
+            save_chat_history(request, user_input)
+            save_chat_history(request, bot_response)
 
             return JsonResponse({'response': bot_response})
         
