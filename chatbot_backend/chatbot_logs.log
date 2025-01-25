@@ -1100,3 +1100,4 @@ django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000
 2025-01-26 01:54:46,781 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
 2025-01-26 01:55:19,873 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
 2025-01-26 01:56:14,406 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-26 01:57:59,800 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.

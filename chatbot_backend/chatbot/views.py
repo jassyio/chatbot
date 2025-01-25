@@ -92,7 +92,7 @@ def chatbot_response(request):
             return JsonResponse({'error': 'Chat service unavailable'}, status=503)
         
         except KeyError as e:
-            logging.error(f"KeyError: (e)")
+            logging.error(f"KeyError: {e}")
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
 
         except json.JSONDecodeError:
