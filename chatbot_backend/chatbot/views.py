@@ -51,7 +51,7 @@ def save_chat_history(request):
     })
     request.session['chat_history'] = chat_history
     log_interaction(request.user.username, user_message)
-    return Response({"status": "success", "chat_history": chat_history})
+    return JsonResponse({"status": "success", "chat_history": chat_history})
 
 # Logging and Monitoring
 @csrf_exempt
