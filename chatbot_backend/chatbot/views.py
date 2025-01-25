@@ -1,7 +1,6 @@
 import json
 import os
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
 import cohere
 from django.contrib.auth.decorators import login_required
@@ -75,7 +74,7 @@ def chatbot_response(request):
 
             # Call Cohere's Generate API
             response = co.generate(
-                model='command-xlarge-nightly',
+                model='command',
                 prompt=f"You are a helpful assistant.\nUser: {user_input}\nAssistant:",
                 max_tokens=max_token,
                 temperature=0.7,
