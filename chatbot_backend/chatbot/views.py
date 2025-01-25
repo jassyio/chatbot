@@ -37,7 +37,9 @@ def session_view(request):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 # Session Management
-@login_required
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def save_chat_history(request):
     session_key = request.session.session_key
     if not session_key:
