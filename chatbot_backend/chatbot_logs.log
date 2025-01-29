@@ -1156,3 +1156,59 @@ django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000
 2025-01-26 02:15:00,877 WARNING Bad Request: /
 2025-01-26 02:16:19,382 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot_backend\settings.py changed, reloading.
 2025-01-26 02:16:47,355 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot_backend\settings.py changed, reloading.
+2025-01-26 02:22:46,211 WARNING Bad Request: /chatbot/
+2025-01-26 02:22:56,060 WARNING Bad Request: /chatbot/
+2025-01-26 02:24:07,456 WARNING Bad Request: /chatbot/
+2025-01-26 02:24:47,938 WARNING Bad Request: /chatbot/
+2025-01-26 02:25:15,245 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-26 02:26:21,058 WARNING Bad Request: /chatbot/
+2025-01-26 02:26:27,298 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-26 02:26:33,725 WARNING Bad Request: /chatbot/
+2025-01-26 02:26:40,313 WARNING Bad Request: /chatbot/
+2025-01-26 02:28:34,585 WARNING Forbidden (CSRF cookie not set.): /api/session/
+2025-01-26 02:31:39,456 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-26 02:35:33,360 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-26 02:35:50,654 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-26 02:36:16,078 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-26 02:36:32,761 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-26 02:36:35,920 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-28 22:40:41,271 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-28 22:53:41,342 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot_backend\settings.py changed, reloading.
+2025-01-29 01:03:49,322 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-29 01:04:03,587 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-29 01:06:22,536 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 01:07:13,736 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 01:13:57,314 WARNING Forbidden: /chatbot/
+2025-01-29 01:16:51,145 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:33:41,065 WARNING Forbidden (CSRF cookie not set.): /chatbot/
+2025-01-29 07:34:17,697 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:35:01,650 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:35:28,701 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:36:25,750 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:38:10,527 WARNING Forbidden: /chatbot/
+2025-01-29 07:45:57,803 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:46:20,909 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:47:23,113 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:47:42,833 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:48:10,734 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:48:53,113 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:49:23,546 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:49:47,483 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:50:18,215 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\urls.py changed, reloading.
+2025-01-29 07:50:37,396 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\urls.py changed, reloading.
+2025-01-29 07:50:58,396 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\urls.py changed, reloading.
+2025-01-29 07:51:22,558 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\urls.py changed, reloading.
+2025-01-29 07:53:16,522 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:54:05,274 WARNING Unauthorized: /api/login
+2025-01-29 07:59:37,316 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 07:59:59,855 WARNING Unauthorized: /api/login
+2025-01-29 08:26:49,139 WARNING Forbidden: /chatbot/
+2025-01-29 08:34:16,059 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.
+2025-01-29 08:34:49,512 INFO HTTP Request: POST https://api.cohere.com/v1/generate "HTTP/1.1 200 OK"
+2025-01-29 08:34:49,552 INFO User: Anonymous, Message: hello
+2025-01-29 08:34:49,552 INFO User: Chatbot, Message: Hi there! I'm your helpful assistant, always here to provide you with thorough responses to your queries, constructive conversations, and engaging discussions. How can I assist you today?
+
+Feel free to ask me anything, and I'll do my best to provide helpful, fact-based answers leveraging the knowledge I've been trained on. 
+
+Let's get started!
+2025-01-29 08:36:18,991 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\views.py changed, reloading.

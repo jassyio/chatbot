@@ -3,8 +3,12 @@ import os
 from django.http import JsonResponse
 from dotenv import load_dotenv
 import cohere
+from django.contrib.auth import authenticate, login
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 from django.middleware.csrf import CsrfViewMiddleware
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import SessionAuthentication
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
@@ -32,15 +36,32 @@ def log_interaction(user, message):
         logging.error(f"Error logging interaction: {e}")
 
 def session_view(request):
+    """Generate a session token for the user."""
     if request.method == 'GET':
+        if not request.session.session_key:
+            request.session.create()
         session_token = str(uuid.uuid4())  # Generate a unique session token
         return JsonResponse({'session_token': session_token})
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-# Session Management
+@csrf_exempt
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    user = authenticate(username=username, password=password)
+    if user:
+        login(request, user)
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"token": token.key})
+    return Response({"error": "Invalid credentials"}, status=401)
+
+# Session Management
+@csrf_protect
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def save_chat_history(request, message):
     session_key = request.session.session_key
@@ -58,7 +79,9 @@ def save_chat_history(request, message):
     return JsonResponse({"status": "success", "chat_history": chat_history})
 
 # Logging and Monitoring
-
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def chatbot_response(request):
     print(f"Requesting method: {request.method}")
     if request.method == 'POST':
@@ -116,7 +139,7 @@ def chatbot_response(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def chatbot_interaction(request):
     user_message = request.data.get('message')
@@ -133,7 +156,7 @@ class SecureChatbotCsrfMiddleware(CsrfViewMiddleware):
             super().process_view(request, callback, callback_args, callback_kwargs)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def secure_api_endpoint(request):
     # Example endpoint with security measures
