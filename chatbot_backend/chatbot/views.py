@@ -1,20 +1,24 @@
 import json
 import os
-from django.http import JsonResponse
+import logging
+import uuid
+from datetime import datetime
+
+# from django.http import JsonResponse
+from django.contrib.auth import authenticate
+# from django.utils.decorators import method_decorator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+# from rest_framework.decorators import authentication_classes, permission_classes
 from dotenv import load_dotenv
 import cohere
-from django.contrib.auth import authenticate, login
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from django.middleware.csrf import CsrfViewMiddleware
-from rest_framework.authentication import TokenAuthentication
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.response import Response
-import logging
-from datetime import datetime
-import uuid
+
+from .serializers import UserRegistrationSerializer, UserLoginSerializer
+
 # Load environment variables
 load_dotenv()
 cohere_api_key = os.getenv('COHERE_API_KEY')
@@ -22,148 +26,176 @@ cohere_api_key = os.getenv('COHERE_API_KEY')
 # Initialize the Cohere client
 co = cohere.Client(cohere_api_key)
 
-# Initialize logging
-logging.basicConfig(
-    filename='chatbot_logs.log',
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s %(message)s'
-)
+# Configure logging
+logger = logging.getLogger(__name__)
 
-def log_interaction(user, message):
-    try:
-        logging.info(f"User: {user}, Message: {message}")
-    except Exception as e:
-        logging.error(f"Error logging interaction: {e}")
+class UserRegistrationView(APIView):
+    """Handle user registration with token creation"""
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            token = Token.objects.create(user=user)  # Create auth token
+            return Response({
+                'user': serializer.data,
+                'token': token.key
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def session_view(request):
-    """Generate a session token for the user."""
-    if request.method == 'GET':
-        if not request.session.session_key:
-            request.session.create()
-        session_token = str(uuid.uuid4())  # Generate a unique session token
-        return JsonResponse({'session_token': session_token})
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
+class UserLoginView(APIView):
+    """Handle user login and token authentication"""
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@csrf_exempt
-@api_view(['POST'])
-def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+        user = authenticate(
+            request,
+            email=serializer.validated_data['email'],
+            password=serializer.validated_data['password']
+        )
 
-    user = authenticate(username=username, password=password)
-    if user:
-        login(request, user)
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({"token": token.key})
-    return Response({"error": "Invalid credentials"}, status=401)
+        if not user:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-# Session Management
-@csrf_protect
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def save_chat_history(request, message):
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.create()
-        request.session.save()
-    chat_history = request.session.get('chat_history', [])
-    
-    chat_history.append({
-        'message': message,
-        'timestamp': datetime.now().isoformat()
-    })
-    request.session['chat_history'] = chat_history
-    log_interaction(request.user.username, message)
-    return JsonResponse({"status": "success", "chat_history": chat_history})
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
 
-# Logging and Monitoring
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def chatbot_response(request):
-    print(f"Requesting method: {request.method}")
-    if request.method == 'POST':
+class ChatbotView(APIView):
+    """Handle authenticated chatbot interactions"""
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
         try:
-            if not request.body:
-                return JsonResponse({'error': 'Empty request body'}, status=400)
-            
-            body = json.loads(request.body)
-            user_input = body.get('message', '')
-            short_reply = body.get('short_reply', False)
+            data = json.loads(request.body)
+            user_input = data.get('message', '').strip()
+            short_reply = data.get('short_reply', False)
 
             if not user_input:
-                return JsonResponse({'error': 'Message is required'}, status=400)
-            
+                return Response(
+                    {'error': 'Message is required'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            max_token = 50 if short_reply else 150
-
-            # Call Cohere's Generate API
+            # Generate response with Cohere
             response = co.generate(
                 model='command',
-                prompt=f"You are a helpful assistant.\nUser: {user_input}\nAssistant:",
-                max_tokens=max_token,
+                prompt=f"User: {user_input}\nAssistant:",
+                max_tokens=150 if not short_reply else 50,
                 temperature=0.7,
                 p=0.9,
             )
 
             bot_response = response.generations[0].text.strip()
-            log_interaction('User', user_input)
-            log_interaction('Chatbot', bot_response)
+            
+            # Log interaction
+            self._log_interaction(request.user, user_input, bot_response)
 
-            save_chat_history(request, user_input)
-            save_chat_history(request, bot_response)
-
-            return JsonResponse({'response': bot_response})
-        
-        except cohere.CohereError as e:
-            logging.error(f"Cohere API Error: {e}")
-            return JsonResponse({'error': 'Chat service unavailable'}, status=503)
-        
-        except KeyError as e:
-            logging.error(f"KeyError: {e}")
-            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+            return Response({
+                'user_message': user_input,
+                'bot_response': bot_response,
+                'timestamp': datetime.now().isoformat()
+            })
 
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+            return Response(
+                {'error': 'Invalid JSON format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except cohere.CohereError as e:
-            print(f"Error communicating with Cohere: {e}")
-            return JsonResponse({'error': f"Error communicating with Cohere: {e}"}, status=500)
+            logger.error(f"Cohere API Error: {str(e)}")
+            return Response(
+                {'error': 'Chat service unavailable'},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
         except Exception as e:
-            print(f"Exception: {str(e)}")
-            return JsonResponse({'error': str(e)}, status=500)
-    elif request.method == 'GET':
-        return JsonResponse({'message': 'This endpoint only accepts POST requests'}, status=400)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+            logger.error(f"Unexpected error: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def chatbot_interaction(request):
-    user_message = request.data.get('message')
-    log_interaction(request.user.username, user_message)
-    # Simulate chatbot response
-    bot_response = f"Hello, {request.user.username}. You said: {user_message}"
-    log_interaction('Chatbot', bot_response)
-    return Response({"user_message": user_message, "bot_response": bot_response})
+    def _log_interaction(self, user, user_input, bot_response):
+        """Log user interactions with context"""
+        logger.info(
+            f"User {user.email} ({user.pk}) - Input: {user_input} | Response: {bot_response}",
+            extra={
+                'user_id': user.pk,
+                'input': user_input,
+                'response': bot_response,
+                'timestamp': datetime.now().isoformat()
+            }
+        )
 
-# Security Measures
-class SecureChatbotCsrfMiddleware(CsrfViewMiddleware):
-    def process_view(self, request, callback, callback_args, callback_kwargs):
-        if request.method == 'POST':
-            super().process_view(request, callback, callback_args, callback_kwargs)
+class SessionView(APIView):
+    """Generate session tokens for anonymous users"""
+    def get(self, request):
+        if not request.session.session_key:
+            request.session.create()
+        return Response({
+            'session_token': str(uuid.uuid4()),
+            'session_key': request.session.session_key
+        })
 
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def secure_api_endpoint(request):
-    # Example endpoint with security measures
-    data = request.data.get('payload')
-    log_interaction(request.user.username, f"Accessed secure endpoint with payload: {data}")
-    return Response({"status": "secure data received"})
+class ChatHistoryView(APIView):
+    """Manage chat history storage"""
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-# Home Endpoint
-def api_home(request):
-    return JsonResponse({'message': 'Welcome to the Chatbot API!'})
+    def post(self, request):
+        try:
+            message = request.data.get('message')
+            if not message:
+                return Response(
+                    {'error': 'Message is required'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            chat_history = request.session.get('chat_history', [])
+            entry = {
+                'message': message,
+                'timestamp': datetime.now().isoformat(),
+                'user': request.user.pk
+            }
+            chat_history.append(entry)
+            request.session['chat_history'] = chat_history
+            
+            return Response({'status': 'success', 'entry': entry})
+
+        except Exception as e:
+            logger.error(f"Chat history error: {str(e)}")
+            return Response(
+                {'error': 'Failed to save chat history'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class APIHomeView(APIView):
+    """API status and information endpoint"""
+    
+    def get(self, request):
+        """Return basic API information"""
+        try:
+            return Response({
+                'message': 'Welcome to the Chatbot API!',
+                'version': '1.0.1',
+                'status': 'operational',
+                'timestamp': datetime.now().isoformat(),
+                'endpoints': {
+                    'register': '/register/',
+                    'login': '/login/',
+                    'chat': '/chat/',
+                    'docs': '/swagger/'
+                }
+            })
+        except Exception as e:
+            logger.error(f"API Home Error: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=500,
+                headers={'Retry-After': '10'}
+            )

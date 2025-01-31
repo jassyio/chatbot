@@ -1216,3 +1216,7 @@ Let's get started!
 2025-01-31 17:59:13,110 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\models.py changed, reloading.
 2025-01-31 17:59:53,343 WARNING Not Found: /favicon.ico
 2025-01-31 18:03:41,029 WARNING Unauthorized: /chatbot/
+2025-01-31 21:48:48,969 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\forms.py changed, reloading.
+2025-01-31 21:52:02,567 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\models.py changed, reloading.
+2025-01-31 21:52:18,914 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\models.py changed, reloading.
+2025-01-31 21:53:11,877 INFO C:\Users\user\Desktop\chatbot\chatbot_backend\chatbot\managers.py changed, reloading.
