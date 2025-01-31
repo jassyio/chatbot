@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.middleware.csrf import CsrfViewMiddleware
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -61,7 +61,7 @@ def login_view(request):
 # Session Management
 @csrf_protect
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def save_chat_history(request, message):
     session_key = request.session.session_key
@@ -80,7 +80,7 @@ def save_chat_history(request, message):
 
 # Logging and Monitoring
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def chatbot_response(request):
     print(f"Requesting method: {request.method}")
@@ -139,7 +139,7 @@ def chatbot_response(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def chatbot_interaction(request):
     user_message = request.data.get('message')
@@ -156,7 +156,7 @@ class SecureChatbotCsrfMiddleware(CsrfViewMiddleware):
             super().process_view(request, callback, callback_args, callback_kwargs)
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def secure_api_endpoint(request):
     # Example endpoint with security measures
