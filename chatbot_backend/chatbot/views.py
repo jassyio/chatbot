@@ -4,6 +4,7 @@ import logging
 import uuid
 from datetime import datetime
 
+from django.http import JsonResponse
 # from django.http import JsonResponse
 from django.contrib.auth import authenticate
 # from django.utils.decorators import method_decorator
@@ -174,28 +175,5 @@ class ChatHistoryView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-class APIHomeView(APIView):
-    """API status and information endpoint"""
-    
-    def get(self, request):
-        """Return basic API information"""
-        try:
-            return Response({
-                'message': 'Welcome to the Chatbot API!',
-                'version': '1.0.1',
-                'status': 'operational',
-                'timestamp': datetime.now().isoformat(),
-                'endpoints': {
-                    'register': '/register/',
-                    'login': '/login/',
-                    'chat': '/chat/',
-                    'docs': '/swagger/'
-                }
-            })
-        except Exception as e:
-            logger.error(f"API Home Error: {str(e)}")
-            return Response(
-                {'error': 'Internal server error'},
-                status=500,
-                headers={'Retry-After': '10'}
-            )
+def api_home(request):
+    return JsonResponse({'message': 'Welcome to the chatbot API!'})

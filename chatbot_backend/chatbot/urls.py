@@ -5,11 +5,11 @@ from .views import (
     ChatbotView,
     SessionView,
     ChatHistoryView,
-    APIHomeView,
+    api_home,
 )
 
 urlpatterns = [
-    path('', APIHomeView.as_view(), name='api_home'),
+    path('', api_home, name='api_home'),
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('chat/', ChatbotView.as_view(), name='chatbot'),
