@@ -34,14 +34,16 @@ class UserRegistrationView(APIView):
     """Handle user registration with token creation"""
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
+        
         if serializer.is_valid():
-            user = serializer.save()
-            token = Token.objects.create(user=user)  # Create auth token
-            return Response({
-                'user': serializer.data,
-                'token': token.key
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user = serializer.save()
+                token, created = Token.objects.get_or_create(user=user) # Create auth token
+                return Response(status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginView(APIView):
     """Handle user login and token authentication"""
