@@ -15,7 +15,7 @@ function App() {
 
   const initializeSession = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/session/', { timeout: 5000 });
+      const response = await axios.get('http://localhost:8000/session/', { timeout: 5000 });
       const token = response.data.session_token;
       setSessionToken(token);
       localStorage.setItem('sessionToken', token);
