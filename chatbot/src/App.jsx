@@ -62,7 +62,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/chatbot/',
+        'http://localhost:8000/chat/',
         { message },
         {
           headers: {
