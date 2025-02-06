@@ -14,7 +14,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-# from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import authentication_classes, permission_classes
 from dotenv import load_dotenv
 import cohere
 
@@ -70,8 +70,8 @@ class UserLoginView(APIView):
 
 class ChatbotView(APIView):
     """Handle authenticated chatbot interactions"""
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         try:
