@@ -23,11 +23,12 @@ function Chat() {
     setInputMessage("")
 
     try {
+      const token = localStorage.getItem('token') // Retrieve token from localStorage
       const response = await axios.post("http://localhost:8000/chat/", {
         message: inputMessage,
       }, {
         headers: {
-          Authorization: `Token ${localStorage.getItem('token')}`,
+          Authorization: `Token ${token}`,
         },
       })
 

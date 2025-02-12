@@ -19,6 +19,7 @@ function Login({ setIsAuthenticated }) {
       })
 
       if (response.status === 200) {
+        localStorage.setItem('token', response.data.token) // Store token in localStorage
         setIsAuthenticated(true)
         navigate("/chat")
       }
