@@ -39,7 +39,7 @@ class UserRegistrationView(APIView):
                 return Response(status=status.HTTP_201_CREATED)
             except Exception as e:
                 logger.error(f"Error during user registration: {str(e)}")
-                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'An error occurred during registration. Please try again later.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -172,7 +172,7 @@ class ChatHistoryView(APIView):
         except Exception as e:
             logger.error(f"Chat history error: {str(e)}")
             return Response(
-                {'error': 'Failed to save chat history'},
+                {'error': 'An error occurred while saving chat history. Please try again later.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
