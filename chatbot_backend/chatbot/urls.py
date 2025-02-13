@@ -10,7 +10,7 @@ from .views import (
 
 urlpatterns = [
     path('', api_home, name='api_home'),
-    path('register/', UserRegistrationView.as_view()),
+    path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('chat/', ChatbotView.as_view(), name='chatbot'),
     path('session/', SessionView.as_view(), name='session'),

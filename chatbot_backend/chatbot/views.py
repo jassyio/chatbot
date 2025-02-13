@@ -5,9 +5,7 @@ import uuid
 from datetime import datetime
 
 from django.http import JsonResponse
-# from django.http import JsonResponse
 from django.contrib.auth import authenticate
-# from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -40,6 +38,7 @@ class UserRegistrationView(APIView):
                 token, created = Token.objects.get_or_create(user=user) # Create auth token
                 return Response(status=status.HTTP_201_CREATED)
             except Exception as e:
+                logger.error(f"Error during user registration: {str(e)}")
                 return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -105,6 +104,7 @@ class ChatbotView(APIView):
             })
 
         except json.JSONDecodeError:
+            logger.error("Invalid JSON format")
             return Response(
                 {'error': 'Invalid JSON format'},
                 status=status.HTTP_400_BAD_REQUEST

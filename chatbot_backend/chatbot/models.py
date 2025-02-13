@@ -7,6 +7,9 @@ from django.utils import timezone
 # Create your models here.
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """
+    Custom user model that uses email as the unique identifier for authentication.
+    """
     email = models.EmailField(_("email address"), unique=True)
     date_joined = models.DateTimeField(default=timezone.now)
 

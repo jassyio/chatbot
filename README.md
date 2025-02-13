@@ -11,6 +11,7 @@ The Chatbot project is designed to provide a seamless and interactive experience
 To get started with the Chatbot application, follow these steps:
 
 1. **Clone the repository**:
+
     ```bash
     git clone https://github.com/yourusername/chatbot.git
     cd chatbot
@@ -18,11 +19,14 @@ To get started with the Chatbot application, follow these steps:
 
 2. **Install dependencies**:
     - For the frontend:
+
         ```bash
         cd chatbot-frontend
         npm install
         ```
+
     - For the backend:
+
         ```bash
         cd chatbot_backend
         pip install -r requirements.txt
@@ -30,17 +34,21 @@ To get started with the Chatbot application, follow these steps:
 
 3. **Set up Cohere**:
     - Add your Cohere API key to a `.env` file in the `chatbot_backend` directory:
+
         ```
         COHERE_API_KEY=your_cohere_api_key
         ```
 
 4. **Run the application**:
     - Start the backend server:
+
         ```bash
         cd chatbot_backend
         python manage.py runserver
         ```
+
     - Start the frontend development server:
+
         ```bash
         cd chatbot-frontend
         npm run dev

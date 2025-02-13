@@ -4,8 +4,13 @@ from django.contrib.auth import get_user_model
 # Create your tests here.
 
 class UserManagersTest(TestCase):
-
+    """
+    Test case for the custom user manager.
+    """
     def test_create_user(self):
+        """
+        Test creating a regular user.
+        """
         User = get_user_model()
         user = User.objects.create_user(email='lewis@gmail.com', password='test123')
         self.assertEqual(user.email, 'lewis@gmail.com')
@@ -26,6 +31,9 @@ class UserManagersTest(TestCase):
             User.objects.create_user(email="", password="foo")
 
     def test_create_superuser(self):
+        """
+        Test creating a superuser.
+        """
         User = get_user_model()
         admin_user = User.objects.create_superuser(email="super@user.com", password="foo")
         self.assertEqual(admin_user.email, "super@user.com")

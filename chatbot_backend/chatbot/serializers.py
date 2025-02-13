@@ -5,6 +5,9 @@ from rest_framework.authtoken.models import Token
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration.
+    """
     password =  serializers.CharField(write_only=True)
 
     class Meta:
@@ -21,5 +24,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
     
 class UserLoginSerializer(serializers.Serializer):
+    """
+    Serializer for user login.
+    """
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
