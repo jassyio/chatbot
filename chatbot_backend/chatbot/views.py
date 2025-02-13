@@ -43,8 +43,8 @@ class UserRegistrationView(APIView):
                     {'error': 'An error occurred during registration. Please try again later.'},
                     status=status.HTTP_400_BAD_REQUEST
                         )
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginView(APIView):
     """Handle user login and token authentication"""
