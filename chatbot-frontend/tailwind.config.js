@@ -1,12 +1,23 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        'chat-area': 'calc(100vw - 72px)', // Custom width for the chat area
+      },
+      margin: {
+        72: '72px', // Ensure 72px margin is available
+      },
+      colors: {
+        'sidebar-bg': '#2D2D2D', // Custom background color for sidebar
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }
-
