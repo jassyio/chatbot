@@ -1,27 +1,47 @@
-"use client"
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import LoginRegister from "./LoginRegister";
+import Chat from "./Chat";
+import LoadingScreen from "./LoadingScreen";
 
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
-import { useState } from "react"
-import Login from "./pages/Login"
-import Signup from "./pages/Signup"
-import Chat from "./pages/Chat"
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const handleLogin = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsLoggedIn(true);
+    }, 9000); // Simulate a delay for loading animation
+  };
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <Routes>
-          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/chat" element={isAuthenticated ? <Chat /> : <Navigate to="/login" />} />
-          <Route path="/" element={<Navigate to="/login" />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isLoading ? (
+              <LoadingScreen />
+            ) : isLoggedIn ? (
+              <Navigate to="/chat" replace />
+            ) : (
+              <LoginRegister onLogin={handleLogin} />
+            )
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            isLoggedIn ? (
+              <Chat />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+      </Routes>
     </Router>
-  )
+  );
 }
-
-export default App
-
