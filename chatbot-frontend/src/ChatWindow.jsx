@@ -1,24 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Paperclip, Mic, Image, Send, Edit, Copy } from "lucide-react";
 import OpenIcon from "./assets/osidebar.png"; // Import the open sidebar icon
 import CloseIcon from "./assets/csidebar.png"; // Import the close sidebar icon
 
-export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messages, setMessages, inputMessage, setInputMessage, handleSubmit, messagesEndRef }) {
   const [inputHeight, setInputHeight] = useState("auto"); // Dynamic height for input
-  const messagesEndRef = useRef(null);
-
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    setMessages((prev) => [...prev, { sender: "user", content: input }]);
-    setInput("");
-    setInputHeight("auto"); // Reset input height after sending
-  };
+  // const [messages, setMessages] = useState([]); // State for messages
 
   const handleInputChange = (e) => {
-    setInput(e.target.value);
+    setInputMessage(e.target.value);
     // Adjust input height dynamically
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -60,7 +51,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
             <div
               key={i}
               className={`p-3 my-2 rounded-lg max-w-full transition-all duration-300 ${
-                msg.sender === "user"
+                msg.isUser
                   ? "bg-gray-800 text-white self-end"
                   : "bg-gray-700 text-gray-300 self-start"
               }`}
@@ -72,19 +63,19 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
             >
               <div className="flex items-center justify-between">
                 {/* Message Content */}
-                <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                 <div className="flex space-x-2">
-                  {msg.sender === "user" && (
+                  {msg.isUser && (
                     <Edit
                       className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white"
                       onClick={() => console.log("Edit message:", i)}
                       aria-label="Edit message"
                     />
                   )}
-                  {msg.sender === "bot" && (
+                  {!msg.isUser && (
                     <Copy
                       className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white"
-                      onClick={() => navigator.clipboard.writeText(msg.content)}
+                      onClick={() => navigator.clipboard.writeText(msg.text)}
                       aria-label="Copy message"
                     />
                   )}
@@ -98,7 +89,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
 
       {/* Input Form */}
       <form
-        onSubmit={handleSend}
+        onSubmit={handleSubmit}
         className="p-4 bg-gray-900" // Match the chat window background
       >
         <div className="flex items-end space-x-3">
@@ -108,7 +99,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
             <Image className="w-5 h-5 text-gray-400 cursor-pointer hover:text-white" />
           </div>
           <textarea
-            value={input}
+            value={inputMessage}
             onChange={handleInputChange}
             placeholder="Type your message..."
             className="flex-grow p-2 bg-gray-700 rounded-lg border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 resize-none overflow-hidden"
@@ -134,3 +125,20 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
     </div>
   );
 }
+
+ChatWindow.propTypes = {
+  sidebarOpen: PropTypes.bool.isRequired,
+  setSidebarOpen: PropTypes.func.isRequired,
+  newChat: PropTypes.bool.isRequired,
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      isUser: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  setMessages: PropTypes.func.isRequired,
+  inputMessage: PropTypes.string.isRequired,
+  setInputMessage: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  messagesEndRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+};
