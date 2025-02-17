@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import LoginRegister from "./LoginRegister";
 import Chat from "./Chat";
 import LoadingScreen from "./LoadingScreen";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleLogin = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setIsLoggedIn(true);
+      setIsAuthenticated(true);
     }, 9000); // Simulate a delay for loading animation
   };
 
@@ -22,10 +29,18 @@ export default function App() {
         <Route
           path="/"
           element={
+            isAuthenticated ? (
+              <Navigate to="/chat" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/login"
+          element={
             isLoading ? (
               <LoadingScreen />
-            ) : isLoggedIn ? (
-              <Navigate to="/chat" replace />
             ) : (
               <LoginRegister onLogin={handleLogin} />
             )
@@ -34,10 +49,10 @@ export default function App() {
         <Route
           path="/chat"
           element={
-            isLoggedIn ? (
+            isAuthenticated ? (
               <Chat />
             ) : (
-              <Navigate to="/" replace />
+              <Navigate to="/login" replace />
             )
           }
         />

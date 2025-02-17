@@ -1,14 +1,18 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import { CheckCircle, ThumbsUp } from "lucide-react"; // Import icons for success feedback
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginRegister({ onLogin }) {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false); // Track success state
+  const navigate = useNavigate();
 
   const toggleMode = () => {
     setIsLoginMode(!isLoginMode);
@@ -16,7 +20,7 @@ export default function LoginRegister({ onLogin }) {
     setIsSuccess(false); // Reset success state when toggling modes
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -24,17 +28,48 @@ export default function LoginRegister({ onLogin }) {
       setError("Passwords do not match.");
       return;
     }
-
-    if (!username.trim() || !password.trim() || (!isLoginMode && !name.trim())) {
+    
+    if (!email.trim() || !password.trim() || (!isLoginMode && !name.trim())) {
       setError("All fields are required.");
       return;
     }
 
-    // Simulate successful registration/login
-    setIsSuccess(true);
-    setTimeout(() => {
-      onLogin({ name, username }); // Call the onLogin callback
-    }, 1500); // Delay to show success message
+    try {
+      if (isLoginMode) {
+        const response = await axios.post("http://localhost:8000/login/", {
+          email,
+          password,
+        });
+        if (response.status === 200) {
+          localStorage.setItem('token', response.data.token); // Store token in localStorage
+          setIsSuccess(true);
+          setTimeout(() => {
+            onLogin({ name: response.data.name, email }); // Call the onLogin callback
+            navigate("/chat");
+          }, 1500); // Delay to show success message
+        }
+      } else {
+        const response = await axios.post("http://localhost:8000/register/", {
+          name,
+          email,
+          password,
+        });
+        if (response.status === 201) {
+          setIsSuccess(true);
+          setTimeout(() => {
+            onLogin({ name, email }); // Call the onLogin callback
+            navigate("/chat");
+          }, 1500); // Delay to show success message
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setError(isLoginMode ? "Failed to login. Please try again." : "Failed to register. Please try again.");
+    }
+  };
+
+  LoginRegister.propTypes = {
+    onLogin: PropTypes.func.isRequired,
   };
 
   return (
@@ -90,13 +125,12 @@ export default function LoginRegister({ onLogin }) {
               </div>
             )}
             <div>
-              <label className="block text-white font-medium mb-1">Username</label>
+              <label className="block text-white font-medium mb-1">Email</label>
               <input
-                type="text"
-                placeholder="Enter your username"
+                type="email"
+                placeholder="Enter your email"
                 className="w-full p-3 border border-gray-500 rounded-md bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -105,7 +139,6 @@ export default function LoginRegister({ onLogin }) {
                 type="password"
                 placeholder="Enter your password"
                 className="w-full p-3 border border-gray-500 rounded-md bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
@@ -116,7 +149,6 @@ export default function LoginRegister({ onLogin }) {
                   type="password"
                   placeholder="Confirm your password"
                   className="w-full p-3 border border-gray-500 rounded-md bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                  value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
@@ -135,7 +167,7 @@ export default function LoginRegister({ onLogin }) {
         {!isSuccess && (
           <div className="text-center mt-6">
             <p className="text-gray-400">
-              {isLoginMode ? "Don't have an account?" : "Already have an account?"}{" "}
+              {isLoginMode ? "Don't have an account?" : "Already have an account?"} {" "}
               <button
                 onClick={toggleMode}
                 className="text-green-500 hover:underline font-medium"
