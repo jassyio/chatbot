@@ -25,6 +25,13 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
     setInputHeight(`${e.target.scrollHeight}px`);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // Prevent new line on Enter key
+      handleSend(e); // Send message
+    }
+  };
+
   useEffect(() => {
     if (newChat) setMessages([]);
   }, [newChat]);
@@ -59,7 +66,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
           messages.map((msg, i) => (
             <div
               key={i}
-              className={`p-3 my-2 rounded-lg max-w-full transition-all duration-300 ${
+              className={`p-3 my-2 rounded-lg max-w-full transition-all duration-300 relative group ${
                 msg.sender === "user"
                   ? "bg-gray-800 text-white self-end"
                   : "bg-gray-700 text-gray-300 self-start"
@@ -73,7 +80,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
               <div className="flex items-center justify-between">
                 {/* Message Content */}
                 <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   {msg.sender === "user" && (
                     <Edit
                       className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white"
@@ -110,6 +117,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat }) {
           <textarea
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             className="flex-grow p-2 bg-gray-700 rounded-lg border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 resize-none overflow-hidden"
             style={{
