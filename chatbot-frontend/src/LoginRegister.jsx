@@ -90,7 +90,6 @@ export default function LoginRegister({ onLogin }) {
           </div>
         )}
 
-        {/* Intro/Directions */}
         {!isSuccess && (
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-center mb-2 text-white">
@@ -104,12 +103,10 @@ export default function LoginRegister({ onLogin }) {
           </div>
         )}
 
-        {/* Error Message */}
         {error && !isSuccess && (
           <p className="text-red-500 mb-4 text-center">{error}</p>
         )}
 
-        {/* Form */}
         {!isSuccess && (
           <form onSubmit={handleSubmit} className="space-y-6">
             {!isLoginMode && (

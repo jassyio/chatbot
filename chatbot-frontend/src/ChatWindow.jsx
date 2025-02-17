@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Paperclip, Mic, Image, Send, Edit, Copy } from "lucide-react";
-import OpenIcon from "./assets/osidebar.png"; // Import the open sidebar icon
-import CloseIcon from "./assets/csidebar.png"; // Import the close sidebar icon
+import OpenIcon from "./assets/osidebar.png";
+import CloseIcon from "./assets/csidebar.png";
 
 export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messages, setMessages, inputMessage, setInputMessage, handleSubmit, messagesEndRef }) {
-  const [inputHeight, setInputHeight] = useState("auto"); // Dynamic height for input
-  // const [messages, setMessages] = useState([]); // State for messages
+  const [inputHeight, setInputHeight] = useState("auto");
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
-    // Adjust input height dynamically
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
     setInputHeight(`${e.target.scrollHeight}px`);
@@ -57,8 +55,8 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
               }`}
               style={{
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                width: "fit-content", // Fit content width
-                maxWidth: "90%", // Limit max width to avoid overly wide bubbles
+                width: "fit-content",
+                maxWidth: "90%",
               }}
             >
               <div className="flex items-center justify-between">
@@ -87,10 +85,9 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Form */}
       <form
         onSubmit={handleSubmit}
-        className="p-4 bg-gray-900" // Match the chat window background
+        className="p-4 bg-gray-900"
       >
         <div className="flex items-end space-x-3">
           <div className="flex items-center space-x-2">
@@ -105,7 +102,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
             className="flex-grow p-2 bg-gray-700 rounded-lg border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 resize-none overflow-hidden"
             style={{
               height: inputHeight,
-              maxHeight: "200px", // Limit max height to avoid excessive expansion
+              maxHeight: "200px",
             }}
             rows={1}
           />
@@ -118,7 +115,6 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
         </div>
       </form>
 
-      {/* Footer */}
       <footer className="p-2 bg-gray-900 text-xs text-gray-400 text-center ">
         Deepsource can make mistakes. Verify the information.
       </footer>
