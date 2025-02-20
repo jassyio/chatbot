@@ -6,7 +6,6 @@ import CloseIcon from "./assets/csidebar.png"; // Import the close sidebar icon
 
 export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messages, setMessages, inputMessage, setInputMessage, handleSubmit, messagesEndRef }) {
   const [inputHeight, setInputHeight] = useState("auto"); // Dynamic height for input
-  // const [messages, setMessages] = useState([]); // State for messages
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
@@ -19,7 +18,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault(); // Prevent new line on Enter key
-      handleSend(e); // Send message
+      handleSubmit(e); // Send message
     }
   };
 
@@ -57,15 +56,8 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
           messages.map((msg, i) => (
             <div
               key={i}
-
               className={`p-3 my-2 rounded-lg max-w-full transition-all duration-300 relative group ${
-                msg.sender === "user"
-
-              className={`p-3 my-2 rounded-lg max-w-full transition-all duration-300 ${
-                msg.isUser
-
-                  ? "bg-gray-800 text-white self-end"
-                  : "bg-gray-700 text-gray-300 self-start"
+                msg.isUser ? "bg-gray-800 text-white self-end" : "bg-gray-700 text-gray-300 self-start"
               }`}
               style={{
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
@@ -75,15 +67,9 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
             >
               <div className="flex items-center justify-between">
                 {/* Message Content */}
-
-                <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  {msg.sender === "user" && (
-
                 <p className="whitespace-pre-wrap break-words">{msg.text}</p>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   {msg.isUser && (
-
                     <Edit
                       className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white"
                       onClick={() => console.log("Edit message:", i)}
@@ -138,7 +124,7 @@ export default function ChatWindow({ sidebarOpen, setSidebarOpen, newChat, messa
       </form>
 
       {/* Footer */}
-      <footer className="p-2 bg-gray-900 text-xs text-gray-400 text-center ">
+      <footer className="p-2 bg-gray-900 text-xs text-gray-400 text-center">
         Deepsource can make mistakes. Verify the information.
       </footer>
     </div>
