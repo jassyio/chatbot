@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import LoginRegister from "./LoginRegister";
 import Chat from "./Chat";
 import LoadingScreen from "./LoadingScreen";
@@ -25,38 +25,56 @@ export default function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/chat" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            isLoading ? (
-              <LoadingScreen />
-            ) : (
-              <LoginRegister onLogin={handleLogin} />
-            )
-          }
-        />
-        <Route
-          path="/chat"
-          element={
-            isAuthenticated ? (
-              <Chat />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-      </Routes>
+      <AppRoutes
+        isAuthenticated={isAuthenticated}
+        isLoading={isLoading}
+        handleLogin={handleLogin}
+      />
     </Router>
+  );
+}
+
+function AppRoutes({ isAuthenticated, isLoading, handleLogin }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    localStorage.setItem('currentPath', location.pathname);
+  }, [location.pathname]);
+
+  const currentPath = localStorage.getItem('currentPath') || '/';
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? (
+            <Navigate to={currentPath} replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          isLoading ? (
+            <LoadingScreen />
+          ) : (
+            <LoginRegister onLogin={handleLogin} />
+          )
+        }
+      />
+      <Route
+        path="/chat"
+        element={
+          isAuthenticated ? (
+            <Chat />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+    </Routes>
   );
 }
