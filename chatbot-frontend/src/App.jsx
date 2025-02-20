@@ -34,6 +34,9 @@ export default function App() {
   );
 }
 
+
+import PropTypes from 'prop-types';
+
 function AppRoutes({ isAuthenticated, isLoading, handleLogin }) {
   const location = useLocation();
 
@@ -77,4 +80,10 @@ function AppRoutes({ isAuthenticated, isLoading, handleLogin }) {
       />
     </Routes>
   );
+}
+
+AppRoutes.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  handleLogin: PropTypes.func.isRequired,
 }

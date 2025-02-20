@@ -67,7 +67,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  
     'http://127.0.0.1:5173',
-    'https://chatai-lime-theta.vercel.app'
+    'https://chatbot-gilt-tau.vercel.app'
 ]
 
 CORS_ALLOW_METHODS = [
