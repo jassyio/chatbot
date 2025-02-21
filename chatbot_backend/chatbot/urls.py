@@ -3,7 +3,7 @@ from .views import (
     UserRegistrationView,
     UserLoginView,
     ChatbotView,
-    SessionView,
+    # SessionView,
     ChatHistoryView,
     api_home,
 )
@@ -13,6 +13,6 @@ urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('chat/', ChatbotView.as_view(), name='chatbot'),
-    path('session/', SessionView.as_view(), name='session'),
+    # path('session/', SessionView.as_view(), name='session'),
     path('history/', ChatHistoryView.as_view(), name='history'),
 ]

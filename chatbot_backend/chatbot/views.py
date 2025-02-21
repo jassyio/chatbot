@@ -1,7 +1,7 @@
 import json
 import os
 import logging
-import uuid
+# import uuid
 from datetime import datetime
 
 from django.http import JsonResponse
@@ -98,7 +98,8 @@ class ChatbotView(APIView):
             bot_response = response.generations[0].text.strip()
             
             # Log interaction
-            self._log_interaction(request.user, user_input, bot_response)
+            if request.user.is_authenticated:
+                self._log_interaction(request.user, user_input, bot_response)
 
             return Response({
                 'user_message': user_input,
@@ -137,15 +138,15 @@ class ChatbotView(APIView):
             }
         )
 
-class SessionView(APIView):
-    """Generate session tokens for anonymous users"""
-    def get(self, request):
-        if not request.session.session_key:
-            request.session.create()
-        return Response({
-            'session_token': str(uuid.uuid4()),
-            'session_key': request.session.session_key
-        })
+# class SessionView(APIView):
+#     """Generate session tokens for anonymous users"""
+#     def get(self, request):
+#         if not request.session.session_key:
+#             request.session.create()
+#         return Response({
+#             'session_token': str(uuid.uuid4()),
+#             'session_key': request.session.session_key
+#         })
 
 class ChatHistoryView(APIView):
     """Manage chat history storage"""
