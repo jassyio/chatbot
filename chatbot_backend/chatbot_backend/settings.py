@@ -161,3 +161,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authorization and Authentication
 AUTH_USER_MODEL = 'chatbot.CustomUser'
+
+# Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Use database-backed sessions
+SESSION_COOKIE_NAME = 'sessionid'  # Name of the session cookie
+SESSION_COOKIE_AGE = 1209600  # Age of session cookies, in seconds (default: 2 weeks)
+SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Whether to expire the session when the user closes their browser

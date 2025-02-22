@@ -5,7 +5,9 @@ import logging
 from datetime import datetime
 
 from django.http import JsonResponse
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -46,8 +48,11 @@ class UserRegistrationView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserLoginView(APIView):
     """Handle user login and token authentication"""
+
+    @method_decorator(csrf_exempt)
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if not serializer.is_valid():
@@ -58,6 +63,16 @@ class UserLoginView(APIView):
             email=serializer.validated_data['email'],
             password=serializer.validated_data['password']
         )
+
+        # set cookie for user login data
+        if user:
+            login(request, user)
+            if not request.data.get('remember_me'):
+                # Expire session when the browser closes
+                request.session.set_expiry(0)
+            else:
+                # Use default SESSION_COOKIE_AGE
+                request.session.set_expiry(None)
 
         if not user:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
