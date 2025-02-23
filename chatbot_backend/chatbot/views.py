@@ -6,7 +6,7 @@ from datetime import datetime
 
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -51,8 +51,7 @@ class UserRegistrationView(APIView):
 
 class UserLoginView(APIView):
     """Handle user login and token authentication"""
-
-    @method_decorator(csrf_exempt)
+    @method_decorator(csrf_protect, name='dispatch')
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if not serializer.is_valid():
