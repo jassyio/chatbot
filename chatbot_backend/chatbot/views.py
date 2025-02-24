@@ -100,13 +100,18 @@ class ChatbotView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
+            # Adjust max_tokens based on user input length
+            input_length = len(user_input.split())
+            max_tokens = min(150, max(50, input_length * 2)) if not short_reply else 50
+
             # Generate response with Cohere
             response = co.generate(
                 model='command',
                 prompt=f"User: {user_input}\nAssistant:",
-                max_tokens=150 if not short_reply else 50,
+                max_tokens=max_tokens,
                 temperature=0.7,
                 p=0.9,
+                timeout=5  # Set a timeout for faster responses
             )
 
             bot_response = response.generations[0].text.strip()
