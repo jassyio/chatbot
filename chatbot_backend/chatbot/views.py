@@ -3,7 +3,7 @@ import os
 import logging
 # import uuid
 from datetime import datetime
-
+from openai import OpenAI
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_protect
@@ -15,16 +15,17 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from dotenv import load_dotenv
-import cohere
-
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
 
 # Load environment variables
 load_dotenv()
-cohere_api_key = os.getenv('COHERE_API_KEY')
 
-# Initialize the Cohere client
-co = cohere.Client(cohere_api_key)
+
+# Initialize the OpenAI API
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv('OPENROUTER_API_KEY'),
+)
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -89,33 +90,48 @@ class ChatbotView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
+        logger.debug(f"Incoming request data: {request.body}")
         try:
             data = json.loads(request.body)
             user_input = data.get('message', '').strip()
-            short_reply = data.get('short_reply', False)
-
             if not user_input:
                 return Response(
                     {'error': 'Message is required'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Adjust max_tokens based on user input length
-            input_length = len(user_input.split())
-            max_tokens = min(150, max(50, input_length * 2)) if not short_reply else 50
+            # Generate response with DeepSeek
+            completion = client.chat.completions.create(
+                extra_headers={
+                    "HTTP-Referer": "http://127.0.0.1:8000/chatbot/",
+                    "X-Title": "chatbot",
+                },
+                extra_body={
+                    "top_p": 1,
+                    "temperature": 0.7,
+                    "frequency_penalty": 0,
+                    "presence_penalty": 0.8,
+                    "repetition_penalty": 1,
+                    "top_k": 0,
+                    "stream": False,
+                    "stream option": {
+                        'include_usage': True,
+                    },
+                    "max_tokens": 500,
+                    "stop": "\n"
 
-            # Generate response with Cohere
-            response = co.generate(
-                model='command',
-                prompt=f"User: {user_input}\nAssistant:",
-                max_tokens=max_tokens,
-                temperature=0.7,
-                p=0.9,
-                timeout=5  # Set a timeout for faster responses
+                },
+                model="deepseek/deepseek-chat",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": user_input
+                    }
+                ]
             )
 
-            bot_response = response.generations[0].text.strip()
-            
+            bot_response = completion.choices[0].message.content.strip()
+
             # Log interaction
             if request.user.is_authenticated:
                 self._log_interaction(request.user, user_input, bot_response)
@@ -126,20 +142,14 @@ class ChatbotView(APIView):
                 'timestamp': datetime.now().isoformat()
             })
 
-        except json.JSONDecodeError:
-            logger.error("Invalid JSON format")
+        except json.JSONDecodeError as e:
+            logger.error(f"Invalid JSON format: {str(e)}")
             return Response(
                 {'error': 'Invalid JSON format'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        except cohere.CohereError as e:
-            logger.error(f"Cohere API Error: {str(e)}")
-            return Response(
-                {'error': 'Chat service unavailable'},
-                status=status.HTTP_503_SERVICE_UNAVAILABLE
-            )
         except Exception as e:
-            logger.error(f"Unexpected error: {str(e)}")
+            logger.error(f"Unexpected error: {str(e)}", exc_info=True)
             return Response(
                 {'error': 'Internal server error'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
