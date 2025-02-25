@@ -90,7 +90,6 @@ class ChatbotView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        logger.debug(f"Incoming request data: {request.body}")
         try:
             data = json.loads(request.body)
             user_input = data.get('message', '').strip()
